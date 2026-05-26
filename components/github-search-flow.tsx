@@ -3,6 +3,7 @@
 import { GitBranch, Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { RepositoryList } from "@/components/repository-list";
 import { UserProfileSummary } from "@/components/user-profile-summary";
 import { useGitHubUserRepositories } from "@/hooks/use-github-user-repositories";
 import { useGitHubUser } from "@/hooks/use-github-user";
@@ -123,10 +124,16 @@ export function GitHubSearchFlow() {
         ) : null}
 
         {userQuery.data && repositoriesQuery.data && !hasQueryError ? (
-          <UserProfileSummary
-            repositoriesCount={repositoriesQuery.data.length}
-            user={userQuery.data}
-          />
+          <div className="grid gap-7">
+            <UserProfileSummary
+              repositoriesCount={repositoriesQuery.data.length}
+              user={userQuery.data}
+            />
+            <RepositoryList
+              key={userQuery.data.login}
+              repositories={repositoriesQuery.data}
+            />
+          </div>
         ) : null}
       </section>
     </main>
