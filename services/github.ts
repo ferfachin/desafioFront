@@ -1,7 +1,11 @@
 import { AxiosError } from "axios";
 import { githubApi } from "@/lib/github-api";
 import { GitHubServiceError } from "@/types/github";
-import type { GitHubRepository, GitHubUser } from "@/types/github";
+import type {
+  GitHubRepository,
+  GitHubRepositoryBranch,
+  GitHubUser,
+} from "@/types/github";
 
 function normalizeGitHubError(error: unknown): GitHubServiceError {
   if (error instanceof AxiosError) {
@@ -85,6 +89,26 @@ export async function getGitHubRepository(
   try {
     const { data } = await githubApi.get<GitHubRepository>(
       `/repos/${encodePathSegment(owner)}/${encodePathSegment(repo)}`,
+    );
+
+    return data;
+  } catch (error) {
+    throw normalizeGitHubError(error);
+  }
+}
+
+export async function getGitHubRepositoryBranches(
+  owner: string,
+  repo: string,
+): Promise<GitHubRepositoryBranch[]> {
+  try {
+    const { data } = await githubApi.get<GitHubRepositoryBranch[]>(
+      `/repos/${encodePathSegment(owner)}/${encodePathSegment(repo)}/branches`,
+      {
+        params: {
+          per_page: 10,
+        },
+      },
     );
 
     return data;

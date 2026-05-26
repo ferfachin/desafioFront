@@ -108,7 +108,7 @@ export function RepositoryList({
 
   return (
     <section className="grid gap-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-primary">Repositorios</p>
           <h2 className="mt-1 text-2xl font-semibold">Projetos encontrados</h2>
@@ -118,9 +118,9 @@ export function RepositoryList({
           </p>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 sm:text-right">
           <label className="text-sm font-medium" htmlFor="repository-sort">
-            Ordenar por{" "}
+            Ordenar por
           </label>
           <select
             className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm text-foreground outline-none transition-colors hover:border-muted-foreground/60 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 sm:w-64"
@@ -139,7 +139,7 @@ export function RepositoryList({
         </div>
       </div>
 
-      <div className="grid gap-3">
+      <div className="grid gap-3 lg:grid-cols-2">
         {paginatedRepositories.map((repository) => {
           const owner = encodeURIComponent(repository.owner.login);
           const repo = encodeURIComponent(repository.name);
@@ -147,11 +147,11 @@ export function RepositoryList({
 
           return (
             <Link
-              className="group rounded-lg border bg-card p-5 shadow-lg shadow-black/10 transition-colors hover:border-primary/70 hover:bg-accent/50 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/20"
+              className="group flex rounded-lg border bg-card p-5 shadow-lg shadow-black/10 transition-colors hover:border-primary/70 hover:bg-accent/50 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/20"
               href={`/repos/${owner}/${repo}?from=${from}`}
               key={repository.id}
             >
-              <article className="grid gap-4">
+              <article className="grid flex-1 content-between gap-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0 space-y-2">
                     <h3 className="break-words text-lg font-semibold text-card-foreground transition-colors group-hover:text-primary">
@@ -209,9 +209,9 @@ export function RepositoryList({
             Pagina {safeCurrentPage} de {totalPages}
           </p>
 
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex">
             <Button
-              className="h-9"
+              className="h-9 w-full sm:w-auto"
               disabled={safeCurrentPage === 1}
               onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
               type="button"
@@ -221,7 +221,7 @@ export function RepositoryList({
               Anterior
             </Button>
             <Button
-              className="h-9"
+              className="h-9 w-full sm:w-auto"
               disabled={safeCurrentPage === totalPages}
               onClick={() =>
                 setCurrentPage((page) => Math.min(totalPages, page + 1))

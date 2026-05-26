@@ -29,6 +29,9 @@ export function GitHubSearchFlow({ initialUsername = "" }: GitHubSearchFlowProps
 
   const isLoading =
     hasSubmittedUsername && (userQuery.isLoading || repositoriesQuery.isLoading);
+  const loadingMessage = userQuery.isLoading
+    ? "Carregando perfil do GitHub..."
+    : "Carregando repositorios do GitHub...";
 
   const queryError = userQuery.error ?? repositoriesQuery.error;
   const hasQueryError =
@@ -106,7 +109,10 @@ export function GitHubSearchFlow({ initialUsername = "" }: GitHubSearchFlowProps
         </form>
 
         {validationError ? (
-          <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-red-200">
+          <p
+            className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-red-200"
+            role="alert"
+          >
             {validationError}
           </p>
         ) : null}
@@ -121,14 +127,17 @@ export function GitHubSearchFlow({ initialUsername = "" }: GitHubSearchFlowProps
         {isLoading ? (
           <section className="rounded-lg border bg-card p-6 text-sm text-muted-foreground shadow-lg shadow-black/20">
             <div className="flex items-center gap-3">
-              <div className="size-2 rounded-full bg-primary" />
-              Carregando dados do GitHub...
+              <div className="size-2 rounded-full bg-primary" aria-hidden="true" />
+              {loadingMessage}
             </div>
           </section>
         ) : null}
 
         {hasQueryError ? (
-          <section className="rounded-lg border border-destructive/40 bg-destructive/10 p-6 text-sm text-red-200">
+          <section
+            className="rounded-lg border border-destructive/40 bg-destructive/10 p-6 text-sm text-red-200"
+            role="alert"
+          >
             {getGitHubErrorMessage(queryError)}
           </section>
         ) : null}

@@ -10,19 +10,33 @@ export type GitHubUser = {
 };
 
 export type GitHubRepositoryOwner = {
+  avatar_url: string;
+  html_url: string;
   login: string;
 };
 
 export type GitHubRepository = {
+  default_branch: string;
   id: number;
   name: string;
   full_name: string;
   description: string | null;
+  forks_count: number;
   stargazers_count: number;
+  open_issues_count: number;
   language: string | null;
   html_url: string;
   updated_at: string;
+  watchers_count: number;
   owner: GitHubRepositoryOwner;
+};
+
+export type GitHubRepositoryBranch = {
+  name: string;
+  protected: boolean;
+  commit: {
+    sha: string;
+  };
 };
 
 export type GitHubServiceErrorCode =
