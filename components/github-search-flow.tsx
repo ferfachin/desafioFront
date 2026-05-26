@@ -1,6 +1,7 @@
 "use client";
 
 import { GitBranch, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RepositoryList } from "@/components/repository-list";
@@ -9,9 +10,17 @@ import { useGitHubUserRepositories } from "@/hooks/use-github-user-repositories"
 import { useGitHubUser } from "@/hooks/use-github-user";
 import { getGitHubErrorMessage } from "@/services/github";
 
-export function GitHubSearchFlow() {
-  const [usernameInput, setUsernameInput] = useState("");
-  const [submittedUsername, setSubmittedUsername] = useState("");
+type GitHubSearchFlowProps = {
+  initialUsername?: string;
+};
+
+export function GitHubSearchFlow({ initialUsername = "" }: GitHubSearchFlowProps) {
+  const router = useRouter();
+  const normalizedInitialUsername = initialUsername.trim();
+  const [usernameInput, setUsernameInput] = useState(normalizedInitialUsername);
+  const [submittedUsername, setSubmittedUsername] = useState(
+    normalizedInitialUsername,
+  );
   const [validationError, setValidationError] = useState("");
 
   const hasSubmittedUsername = submittedUsername.length > 0;
@@ -39,6 +48,7 @@ export function GitHubSearchFlow() {
     setValidationError("");
     setSubmittedUsername(normalizedUsername);
     setUsernameInput(normalizedUsername);
+    router.push(`/?username=${encodeURIComponent(normalizedUsername)}`);
   }
 
   return (
@@ -132,6 +142,7 @@ export function GitHubSearchFlow() {
             <RepositoryList
               key={userQuery.data.login}
               repositories={repositoriesQuery.data}
+              username={userQuery.data.login}
             />
           </div>
         ) : null}

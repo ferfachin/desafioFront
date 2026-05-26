@@ -1,6 +1,13 @@
 "use client";
 
-import { CalendarDays, ChevronLeft, ChevronRight, Code, GitBranch, Star } from "lucide-react";
+import {
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Code,
+  GitBranch,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +15,7 @@ import type { GitHubRepository } from "@/types/github";
 
 type RepositoryListProps = {
   repositories: GitHubRepository[];
+  username: string;
 };
 
 type RepositorySortOption =
@@ -53,12 +61,16 @@ function sortRepositories(
     }
 
     return (
-      new Date(second.updated_at).getTime() - new Date(first.updated_at).getTime()
+      new Date(second.updated_at).getTime() -
+      new Date(first.updated_at).getTime()
     );
   });
 }
 
-export function RepositoryList({ repositories }: RepositoryListProps) {
+export function RepositoryList({
+  repositories,
+  username,
+}: RepositoryListProps) {
   const [sortOption, setSortOption] =
     useState<RepositorySortOption>("stars-desc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,9 +111,7 @@ export function RepositoryList({ repositories }: RepositoryListProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-primary">Repositorios</p>
-          <h2 className="mt-1 text-2xl font-semibold">
-            Projetos encontrados
-          </h2>
+          <h2 className="mt-1 text-2xl font-semibold">Projetos encontrados</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Exibindo {firstVisibleRepository}-{lastVisibleRepository} de{" "}
             {formatNumber(sortedRepositories.length)}
@@ -110,7 +120,7 @@ export function RepositoryList({ repositories }: RepositoryListProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="repository-sort">
-            Ordenar por
+            Ordenar por{" "}
           </label>
           <select
             className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm text-foreground outline-none transition-colors hover:border-muted-foreground/60 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 sm:w-64"
@@ -133,11 +143,12 @@ export function RepositoryList({ repositories }: RepositoryListProps) {
         {paginatedRepositories.map((repository) => {
           const owner = encodeURIComponent(repository.owner.login);
           const repo = encodeURIComponent(repository.name);
+          const from = encodeURIComponent(`/?username=${username}`);
 
           return (
             <Link
               className="group rounded-lg border bg-card p-5 shadow-lg shadow-black/10 transition-colors hover:border-primary/70 hover:bg-accent/50 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/20"
-              href={`/repos/${owner}/${repo}`}
+              href={`/repos/${owner}/${repo}?from=${from}`}
               key={repository.id}
             >
               <article className="grid gap-4">
