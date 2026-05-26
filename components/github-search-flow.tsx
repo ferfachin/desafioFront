@@ -3,6 +3,7 @@
 import { GitBranch, Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { UserProfileSummary } from "@/components/user-profile-summary";
 import { useGitHubUserRepositories } from "@/hooks/use-github-user-repositories";
 import { useGitHubUser } from "@/hooks/use-github-user";
 import { getGitHubErrorMessage } from "@/services/github";
@@ -122,17 +123,10 @@ export function GitHubSearchFlow() {
         ) : null}
 
         {userQuery.data && repositoriesQuery.data && !hasQueryError ? (
-          <section className="grid gap-4 rounded-lg border bg-card p-6 shadow-lg shadow-black/20">
-            <div>
-              <h2 className="text-xl font-semibold text-card-foreground">
-                Resultado para {userQuery.data.login}
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Perfil carregado e {repositoriesQuery.data.length} repositorios
-                encontrados.
-              </p>
-            </div>
-          </section>
+          <UserProfileSummary
+            repositoriesCount={repositoriesQuery.data.length}
+            user={userQuery.data}
+          />
         ) : null}
       </section>
     </main>
